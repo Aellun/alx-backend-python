@@ -6,10 +6,11 @@
 '''
 
 
-from typing import List, Tuple
+import typing
 
 
-def element_length(lst: List[str]) -> List[Tuple[str, int]]:
+def element_length(lst: typing.Iterable[typing.Sequence]) -> \
+        typing.List[typing.Tuple[typing.Sequence, int]]:
     '''Create a list of tuples, where each tuple contains a string
         from the input list and its corresponding length,
         and return this list
