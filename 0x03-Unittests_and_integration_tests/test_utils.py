@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -87,6 +87,48 @@ class TestGetJson(unittest.TestCase):
         # Assert that the result of get_json is
         # equal to the test_payload
         self.assertEqual(result, test_payload)
+
+
+class TestMemoize(unittest.TestCase):
+    '''
+        Test suite for the memoize decorator from utils module.
+        This class contains unit tests that verify the functionality of
+        the memoize decorator by testing its caching behavior.
+    '''
+
+    def test_memoize(self):
+        '''
+        Test that the memoize decorator correctly
+        caches method results.
+        '''
+
+        # Define a class with a memoized property
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        # Create an instance of TestClass
+        test_instance = TestClass()
+
+        # Use patch to mock the a_method
+        with patch.object(test_instance,
+                          'a_method',
+                          return_value=42) as mock_a_method:
+            # Call the memoized property twice
+            result1 = test_instance.a_property
+            result2 = test_instance.a_property
+
+            # Verify that the result is correct
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # Verify that a_method was called only once
+            mock_a_method.assert_called_once()
 
 
 if __name__ == "__main__":
