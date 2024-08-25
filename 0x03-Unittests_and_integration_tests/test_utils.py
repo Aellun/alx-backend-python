@@ -46,7 +46,7 @@ class TestAccessNestedMap(unittest.TestCase):
             access_nested_map(nested_map, path)
 
         # Verify that the exception message is as expected
-        self.assertEqual(str(context.exception), str(path[-1]))
+        self.assertEqual(str(context.exception), f"'{path[-1]}'")
 
 
 if __name__ == "__main__":
